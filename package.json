@@ -32,7 +32,8 @@
     "precompile": "npm run test",
     "clean": "rmdir /s /q dist && mkdir dist",
     "build": "tsc",
-    "compile": "npm run clean && npm run build"
+    "compile": "npm run clean && npm run build",
+    "deploy": "bitburner-sync"
   },
   "devDependencies": {
     "@cucumber/cucumber": "8.11.0",
@@ -106,5 +107,14 @@
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     }
+  },
+  "dependencies": {
+    "bitburner-sync": "^1.5.3"
+  },
+  "config": {
+    "bitburnerAuthToken": "f3tCN3d9CK4JovNgZbO7u5vCewuhvKQeD3pO4J8zTQ0IxeUJpWMJKNqGPvI55zz7",
+    "bitburnerScriptRoot": "./dist",
+    "bitburnerAllowDelete": "false",
+    "bitburnerServerUrl": "127.0.0.1"
   }
 }
