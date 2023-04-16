@@ -1,9 +1,19 @@
 {
   "default": {
-    "paths": ["src/**/*.feature"],
-    "import": ["src/**/*.steps.ts"],
+    "paths": [
+      "src/**/*.feature"
+    ],
+    "import": [
+      "src/**/*.steps.ts"
+    ],
+    "requireModule": [
+      "tsconfig-paths/register"
+    ],
     "parallel": 1,
-    "format": ["html:test-reports/cucumber/cucumber-report.html"],
+    "format": [
+      "html:doc/cucumber-report/report.html",
+      "progress-bar"
+    ],
     "publishQuiet": true
   }
 }
