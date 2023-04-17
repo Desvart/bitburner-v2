@@ -3,7 +3,7 @@ import { NodeAdapter } from '/hacknet/infra/driven-side/node-adapter';
 
 export class Wallet {
   private readonly transactionsBook: Map<string, number> = new Map();
-  private readonly PROFIT_MARGIN: number = 0.5;
+  private readonly INVEST_TO_PROFIT_RATIO: number = 2;
 
   constructor(
     private readonly network: Network,
@@ -41,11 +41,16 @@ export class Wallet {
     return this.totalProduction - this.invested;
   }
 
+  private get maxProfit(): number {
+    return this.invested * this.INVEST_TO_PROFIT_RATIO;
+  }
+
   private get profit(): number {
-    return this.turnover * this.PROFIT_MARGIN;
+    const minProfit = Math.max(this.turnover, 0);
+    return Math.min(minProfit, this.maxProfit);
   }
 
   public get availableCapex(): number {
-    return this.turnover * (1 - this.PROFIT_MARGIN);
+    return Math.max(this.turnover - this.maxProfit, 0);
   }
 }
