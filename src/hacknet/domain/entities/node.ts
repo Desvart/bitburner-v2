@@ -1,24 +1,20 @@
-// eslint-disable-next-line max-classes-per-file
-import { DefaultNode } from '/hacknet/domain/entities/node-default';
-import { Component } from '/hacknet/domain/entities/value-objects/component';
+import { ComponentType, NodeId } from '/hacknet/domain/entities/component';
+import { Level } from '/hacknet/domain/entities/level';
+import { Ram } from '/hacknet/domain/entities/ram';
+import { Cores } from '/hacknet/domain/entities/cores';
+import { Income, Production } from '/hacknet/domain/entities/cash';
 import { NodeAdapter } from '/hacknet/infra/driven-side/node-adapter';
-import { Level } from '/hacknet/domain/entities/value-objects/level';
-import { Ram } from '/hacknet/domain/entities/value-objects/ram';
-import { Cores } from '/hacknet/domain/entities/value-objects/cores';
-import { Yield } from '/hacknet/domain/entities/value-objects/yield';
-import { Id } from '/hacknet/domain/entities/value-objects/id';
-import { Production } from '/hacknet/domain/entities/value-objects/cash';
 
 export class Node {
-  public readonly id: Id;
-  public level = DefaultNode.level;
-  public ram = DefaultNode.ram;
-  public cores = DefaultNode.cores;
-  public productionYield: Yield = DefaultNode.productionYield;
-  public totalProduction: Production = DefaultNode.totalProduction;
+  readonly id = new NodeId(0);
+  level = new Level(this.id, 1);
+  ram = new Ram(this.id, 1);
+  cores = new Cores(this.id, 1);
+  income = new Income(0);
+  production = new Production(0);
 
   constructor(id: number, private readonly nodeAdapter: NodeAdapter) {
-    this.id = new Id(id);
+    this.id = new NodeId(id);
   }
 
   update(): void {
@@ -26,12 +22,12 @@ export class Node {
     this.level = node.level;
     this.ram = node.ram;
     this.cores = node.cores;
-    this.productionYield = node.productionYield;
-    this.totalProduction = node.totalProduction;
+    this.income = node.income;
+    this.production = node.production;
   }
 
-  upgrade(component: Component) {
-    this.nodeAdapter.buyNodeUpgrade(this.id.value, component);
+  upgrade(component: ComponentType) {
+    this.nodeAdapter.buyUpgrade(this.id, component);
     this.update();
   }
 }
@@ -43,28 +39,28 @@ export class NodeBuilder {
     this.node = new Node(id, nodeAdapter);
   }
 
-  setLevel(levelQuantity: number): this {
-    this.node.level = new Level(levelQuantity);
+  setLevel(quantity: number): this {
+    this.node.level = new Level(this.node.id, quantity);
     return this;
   }
 
-  setRam(ramQuantity: number): this {
-    this.node.ram = new Ram(ramQuantity);
+  setRam(quantity: number): this {
+    this.node.ram = new Ram(this.node.id, quantity);
     return this;
   }
 
-  setCores(coresQuantity: number): this {
-    this.node.cores = new Cores(coresQuantity);
+  setCores(quantity: number): this {
+    this.node.cores = new Cores(this.node.id, quantity);
     return this;
   }
 
-  setProductionYield(productionYield: number): this {
-    this.node.productionYield = new Yield(productionYield);
+  setIncome(income: number): this {
+    this.node.income = new Income(income);
     return this;
   }
 
-  setTotalProduction(totalProduction: number): this {
-    this.node.totalProduction = new Production(totalProduction);
+  setProduction(production: number): this {
+    this.node.production = new Production(production);
     return this;
   }
 

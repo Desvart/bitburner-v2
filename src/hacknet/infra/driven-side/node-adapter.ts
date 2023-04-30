@@ -1,12 +1,11 @@
-import { INodePort } from '/hacknet/app/ports/node-port';
-import { NodeStats, NS } from '../interface/NetscriptDefinitions';
-import { Component } from '/hacknet/domain/entities/value-objects/component';
+import { HacknetMultipliers, NodeStats, NS } from '../interface/NetscriptDefinitions';
+import { ComponentType, NodeId } from '/hacknet/domain/entities/component';
 import { NodeBuilder, Node } from '/hacknet/domain/entities/node';
-import { Price } from '/hacknet/domain/entities/value-objects/cash';
+import { Income, Price } from '/hacknet/domain/entities/cash';
 import { replacer, reviver } from '/utils/json-map-serialization';
 
-export class NodeAdapter implements INodePort {
-  private readonly SAVE_FILE: string = 'transactions-book.txt';
+export class NodeAdapter {
+  private readonly SAVE_FILE: string = '/hacknet/app/transactions-book.txt';
 
   constructor(private readonly ns: NS) {}
 
@@ -17,8 +16,8 @@ export class NodeAdapter implements INodePort {
       .setLevel(nodeStat.level)
       .setRam(nodeStat.ram)
       .setCores(nodeStat.cores)
-      .setProductionYield(nodeStat.production)
-      .setTotalProduction(nodeStat.totalProduction)
+      .setIncome(nodeStat.production)
+      .setProduction(nodeStat.totalProduction)
       .build();
   }
 
@@ -31,15 +30,15 @@ export class NodeAdapter implements INodePort {
     return parseInt(match[1], 10);
   }
 
-  getNewNodeCost(): Price {
+  getNodeCost(): Price {
     return new Price(this.ns.hacknet.getPurchaseNodeCost());
   }
 
-  getNodeQuantity(): number {
+  getNetworkSize(): number {
     return this.ns.hacknet.numNodes();
   }
 
-  purchaseNewNode(): Node {
+  purchaseNode(): Node {
     const nodeId: number = this.ns.hacknet.purchaseNode();
     if (nodeId === -1) {
       throw new Error('Could not purchase node');
@@ -47,50 +46,75 @@ export class NodeAdapter implements INodePort {
     return this.getNode(nodeId);
   }
 
-  getUpgradeCost(nodeId: number, component: Component): Price {
+  getUpgradeCost(nodeId: NodeId, component: ComponentType): Price {
     switch (component) {
-      case Component.LEVEL:
-        return new Price(this.ns.hacknet.getLevelUpgradeCost(nodeId, 1));
-      case Component.RAM:
-        return new Price(this.ns.hacknet.getRamUpgradeCost(nodeId, 1));
-      case Component.CORES:
-        return new Price(this.ns.hacknet.getCoreUpgradeCost(nodeId, 1));
+      case ComponentType.LEVEL:
+        return new Price(this.ns.hacknet.getLevelUpgradeCost(nodeId.value, 1));
+      case ComponentType.RAM:
+        return new Price(this.ns.hacknet.getRamUpgradeCost(nodeId.value, 1));
+      case ComponentType.CORES:
+        return new Price(this.ns.hacknet.getCoreUpgradeCost(nodeId.value, 1));
       default:
         throw new Error(`Unknown component ${component}`);
     }
   }
 
-  buyNodeUpgrade(nodeId: number, component: Component): Node {
+  buyUpgrade(nodeId: NodeId, component: ComponentType): Node {
     switch (component) {
-      case Component.LEVEL:
-        this.ns.hacknet.upgradeLevel(nodeId, 1);
+      case ComponentType.LEVEL:
+        this.ns.hacknet.upgradeLevel(nodeId.value, 1);
         break;
-      case Component.RAM:
-        this.ns.hacknet.upgradeRam(nodeId, 1);
+      case ComponentType.RAM:
+        this.ns.hacknet.upgradeRam(nodeId.value, 1);
         break;
-      case Component.CORES:
-        this.ns.hacknet.upgradeCore(nodeId, 1);
+      case ComponentType.CORES:
+        this.ns.hacknet.upgradeCore(nodeId.value, 1);
         break;
       default:
         throw new Error(`Unknown component ${component}`);
     }
-    return this.getNode(nodeId);
+    return this.getNode(nodeId.value);
   }
 
   saveTransactionsBook(transactionsBook: Map<string, number>) {
-    this.ns.write(
-      this.SAVE_FILE,
-      JSON.stringify(transactionsBook, replacer),
-      'w'
-    );
+    this.ns.write(this.SAVE_FILE, JSON.stringify(transactionsBook, replacer), 'w');
   }
 
-  retrieveTransactionsBook(): Map<string, number> {
+  loadTransactionsBook(): Map<string, number> {
     const fileContent: string = this.ns.read(this.SAVE_FILE);
-    if (!fileContent) {
-      return JSON.parse(fileContent, reviver);
+    if (fileContent === '') {
+      return new Map<string, number>();
+    }
+    return JSON.parse(fileContent, reviver);
+  }
+
+  getAvailableCash(): number {
+    return this.ns.getPlayer().money;
+  }
+
+  checkFormulasAvailability(): boolean {
+    return this.ns.fileExists('formulas.exe', 'home');
+  }
+
+  private get hacknetMultipliers(): HacknetMultipliers {
+    return this.ns.getHacknetMultipliers();
+  }
+
+  getSimulatedIncome(levelQty: number, ramQty: number, coreQty: number): Income {
+    if (!this.checkFormulasAvailability()) {
+      throw new Error('Formulas are not available');
     }
 
-    throw new Error('Could not retrieve transactions book');
+    const simulateIncome = this.ns.formulas.hacknetNodes.moneyGainRate(
+      levelQty,
+      ramQty,
+      coreQty,
+      this.hacknetMultipliers.production
+    );
+    return new Income(simulateIncome);
+  }
+
+  async wait(timeToWaitInSeconds: number) {
+    await this.ns.sleep(timeToWaitInSeconds * 1000);
   }
 }

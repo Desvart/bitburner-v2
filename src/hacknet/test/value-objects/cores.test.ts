@@ -1,5 +1,5 @@
-import { Cores } from '../../domain/entities/value-objects/cores';
-import { Component } from '../../domain/entities/value-objects/component';
+import { Cores } from '../../domain/entities/cores';
+import { ComponentType } from '../../domain/entities/component';
 
 describe('Cores object', () => {
   test('Create and retrieve value', () => {
@@ -11,7 +11,7 @@ describe('Cores object', () => {
       .withUpgradeCost(mockedUpgradesCost)
       .build();
 
-    expect(cores.type).toEqual(Component.CORES);
+    expect(cores.type).toEqual(ComponentType.CORES);
     expect(cores.quantity.value).toEqual(mockedQty);
     expect(cores.upgradeCost.value).toEqual(mockedUpgradesCost);
   });

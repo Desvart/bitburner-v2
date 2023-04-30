@@ -1,5 +1,5 @@
-import { Component } from '../../domain/entities/value-objects/component';
-import { Ram } from '../../domain/entities/value-objects/ram';
+import { ComponentType } from '../../domain/entities/component';
+import { Ram } from '../../domain/entities/ram';
 
 describe('Ram object', () => {
   test('Create and retrieve value', () => {
@@ -11,7 +11,7 @@ describe('Ram object', () => {
       .withUpgradeCost(mockedUpgradesCost)
       .build();
 
-    expect(ram.type).toEqual(Component.RAM);
+    expect(ram.type).toEqual(ComponentType.RAM);
     expect(ram.quantity.value).toEqual(mockedQty);
     expect(ram.upgradeCost.value).toEqual(mockedUpgradesCost);
   });

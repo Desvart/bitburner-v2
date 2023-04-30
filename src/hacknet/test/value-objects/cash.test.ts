@@ -1,4 +1,4 @@
-import { Cash } from '../../domain/entities/value-objects/cash';
+import { Cash } from '../../domain/entities/cash';
 
 describe('Cash value object', () => {
 

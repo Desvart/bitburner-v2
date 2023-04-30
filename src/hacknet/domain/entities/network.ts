@@ -1,54 +1,49 @@
 import { NodeAdapter } from '/hacknet/infra/driven-side/node-adapter';
 import { Node } from '/hacknet/domain/entities/node';
-import { Price } from '/hacknet/domain/entities/value-objects/cash';
+import { Income, Production } from '/hacknet/domain/entities/cash';
 
 export class Network {
-  nodes: Array<Node> = [];
+  nodes: Node[];
 
   constructor(private readonly nodeAdapter: NodeAdapter) {
-    this.create();
+    const networkSize = this.nodeAdapter.getNetworkSize();
+    const nodes = new Array<Node>(networkSize);
+    this.nodes = nodes.map((_node, id) => this.nodeAdapter.getNode(id));
   }
 
   get size(): number {
     return this.nodes.length;
   }
 
-  private create(): void {
-    for (let nodeId = 0; nodeId < this.size; nodeId++) {
-      this.nodes[nodeId] = this.nodeAdapter.getNode(nodeId);
-    }
-  }
-
   update() {
-    this.updateNodeArray();
+    this.updateNodes();
     this.nodes.forEach((node) => node.update());
   }
 
-  private updateNodeArray() {
+  private updateNodes() {
     const actualSize = this.nodes.length;
-    const numMissingNodes = this.size - actualSize;
-    if (numMissingNodes < 0) {
-      throw new Error('More nodes in the network than expected');
-    }
+    const realSize = this.nodeAdapter.getNetworkSize();
+    const numMissingNodes = realSize - actualSize;
+
     if (numMissingNodes === 0) {
       return;
     }
-    for (let i = 0; i < numMissingNodes; i++) {
-      const newNodeId = actualSize + i;
-      const newNode = new Node(newNodeId, this.nodeAdapter);
-      this.nodes.push(newNode);
+
+    if (numMissingNodes < 0) {
+      throw new Error('More nodes in the network than expected');
     }
+
+    let missingNodes = new Array<Node>(numMissingNodes);
+    missingNodes = missingNodes.map((_, id) => new Node(actualSize + id, this.nodeAdapter));
+    this.nodes = this.nodes.concat(missingNodes);
   }
 
-  get newNodeCost(): Price {
-    return this.nodeAdapter.getNewNodeCost();
+  getTotalIncome(): Income {
+    const totalIncome = this.nodes.reduce((acc, curr) => acc + curr.income.value, 0);
+    return new Income(totalIncome);
   }
 
-  purchaseNewNode(): void {
-    const newNode = this.nodeAdapter.purchaseNewNode();
-    if (newNode === null) {
-      throw new Error('Could not purchase node');
-    }
-    this.update();
+  get turnover(): Production {
+    return new Production(this.nodes.reduce((acc, currNode) => acc + currNode.production.value, 0));
   }
 }

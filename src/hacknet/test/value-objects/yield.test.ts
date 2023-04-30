@@ -1,4 +1,4 @@
-import { Yield } from '../../domain/entities/value-objects/yield';
+import { Yield } from '../../domain/entities/yield';
 
 describe('Yield value object', () => {
 

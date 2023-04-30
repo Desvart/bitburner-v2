@@ -1,7 +1,7 @@
-import { Component } from '../../domain/entities/value-objects/component';
-import { Level } from '../../domain/entities/value-objects/level';
-import { Ram } from '../../domain/entities/value-objects/ram';
-import { Cores } from '../../domain/entities/value-objects/cores';
+import { ComponentType } from '../../domain/entities/component';
+import { Level } from '../../domain/entities/level';
+import { Ram } from '../../domain/entities/ram';
+import { Cores } from '../../domain/entities/cores';
 import { NodeBuilder } from '../../domain/entities/node-builder';
 import { HacknetMockLib } from '../mock/hacknet-mock-lib';
 

@@ -1,5 +1,5 @@
 import { NodeAdapter } from '../infra/driven-side/node-adapter';
-import { Id } from '../domain/entities/value-objects/id';
+import { Id } from '../domain/entities/id';
 import { HacknetMockLib } from './mock/hacknet-mock-lib';
 
 describe('Node Adapter', () => {

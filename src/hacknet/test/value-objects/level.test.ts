@@ -1,5 +1,5 @@
-import { Component } from '../../domain/entities/value-objects/component';
-import { Level } from '../../domain/entities/value-objects/level';
+import { ComponentType } from '../../domain/entities/component';
+import { Level } from '../../domain/entities/level';
 
 describe('Level object', () => {
   test('Create and retrieve value', () => {
@@ -11,7 +11,7 @@ describe('Level object', () => {
       .withUpgradeCost(mockedUpgradesCost)
       .build();
 
-    expect(level.type).toEqual(Component.LEVEL);
+    expect(level.type).toEqual(ComponentType.LEVEL);
     expect(level.quantity.value).toEqual(mockedQty);
     expect(level.upgradeCost.value).toEqual(mockedUpgradesCost);
   });

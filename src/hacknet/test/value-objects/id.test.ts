@@ -1,4 +1,4 @@
-import { Id } from '../../domain/entities/value-objects/id';
+import { Id } from '../../domain/entities/id';
 
 describe('Id value object', () => {
   test('Create and retrieve value', () => {

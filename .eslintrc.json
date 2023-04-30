@@ -31,11 +31,7 @@
         "devDependencies": true
       }
     ],
-    "lines-between-class-members": [
-      "error",
-      "always",
-      { "exceptAfterSingleLine": true }
-    ],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
     "no-shadow": "off",
@@ -44,10 +40,12 @@
     "@typescript-eslint/no-useless-constructor": "error",
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "error",
-    "no-plusplus": ["error",
+    "no-plusplus": [
+      "error",
       {
         "allowForLoopAfterthoughts": true
       }
-    ]
+    ],
+    "max-classes-per-file": ["error", { "ignoreExpressions": true, "max": 2 }]
   }
 }

@@ -1,4 +1,7 @@
 {
   "tabWidth": 2,
-  "singleQuote": true
+  "singleQuote": true,
+  "printWidth": 100,
+  "max_line_length": 100,
+  "max-len": 100
 }
