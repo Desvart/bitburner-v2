@@ -1,39 +1,43 @@
 export enum LogMode {
-  DEBUG = 'DEBUG',
-  INFO = 'INFO',
   ERROR = 'ERROR',
-  NONE = 'NONE',
+  WARNING = 'WARNING',
+  INFO = 'INFO',
+  DEBUG = 'DEBUG',
 }
 
 export class Log {
-  #debugMode: LogMode = LogMode.INFO;
-  constructor(debugMode: LogMode) {
-    this.#debugMode = debugMode;
-  }
-
-  setDebugMode(debugMode: LogMode): void {
-    this.#debugMode = debugMode;
-  }
+  constructor(private readonly logMode: LogMode = LogMode.INFO) {}
 
   error(message: string): void {
     if (
-      this.#debugMode === LogMode.ERROR ||
-      this.#debugMode === LogMode.INFO ||
-      this.#debugMode === LogMode.DEBUG
+      this.logMode === LogMode.ERROR ||
+      this.logMode === LogMode.WARNING ||
+      this.logMode === LogMode.INFO ||
+      this.logMode === LogMode.DEBUG
     ) {
       console.error(`ERR - ${message}`);
     }
   }
 
+  warning(message: string): void {
+    if (
+      this.logMode === LogMode.WARNING ||
+      this.logMode === LogMode.INFO ||
+      this.logMode === LogMode.DEBUG
+    ) {
+      console.warn(`WARNING - ${message}`);
+    }
+  }
+
   info(message: string): void {
-    if (this.#debugMode === LogMode.INFO || this.#debugMode === LogMode.DEBUG) {
+    if (this.logMode === LogMode.INFO || this.logMode === LogMode.DEBUG) {
       console.info(`INFO - ${message}`);
     }
   }
 
   debug(message: string): void {
-    if (this.#debugMode === LogMode.DEBUG) {
-      console.warn(`DEBUG - ${message}`);
+    if (this.logMode === LogMode.DEBUG) {
+      console.debug(`DEBUG - ${message}`);
     }
   }
 }
