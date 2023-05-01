@@ -42,6 +42,7 @@ export class Log {
   }
 }
 
-export function log(logMode: LogMode = LogMode.INFO): Log {
+// todo: remove this function once hacket"1" can be decommissioned
+export function log(logMode: LogMode = LogMode.DEBUG): Log {
   return new Log(logMode);
 }
