@@ -7,43 +7,42 @@ enum ManagerState {
   SELECTING = 'SELECTING',
   WAITING = 'WAITING',
   UPGRADING = 'UPGRADING',
+  STOP = 'STOP',
 }
 
 export class Manager {
-  iterator = 3; // todo: scaffold to be removed
   #state: ManagerState = ManagerState.SELECTING;
   #componentToBuy: Component;
-  constructor(private readonly nodeAdapter: HacknetAdapter) {}
+  private MAX_SAVING_DURATION = 10; // days
+  constructor(private readonly hacknetAdapter: HacknetAdapter) {}
 
-  run() {
+  run(stepByStep = false) {
     log().info('Hacknet manager running...');
 
     let loopExitCondition = false;
     do {
-      switch (this.#state) {
-        case ManagerState.SELECTING:
-          this.selectComponentToBuy();
-          break;
-        case ManagerState.WAITING:
-          this.waitForAvailableCapital();
-          break;
-        case ManagerState.UPGRADING:
-          this.upgradeNetwork();
-          loopExitCondition = this.test();
-          break;
-        default:
-          loopExitCondition = true;
-      }
-    } while (!loopExitCondition);
+      loopExitCondition = this.executeStateOperations(this.#state);
+    } while (!loopExitCondition && !stepByStep);
 
     log().warning("Hacknet manager exited his loop. It shouldn't have happened.");
   }
 
   // todo: scaffold to be removed
-  test(): boolean {
-    this.iterator -= 1;
-    log().debug(`iterator: ${this.iterator}`);
-    return this.iterator === 0;
+  private executeStateOperations(state: ManagerState): boolean {
+    switch (state) {
+      case ManagerState.SELECTING:
+        this.selectComponentToBuy();
+        break;
+      case ManagerState.WAITING:
+        this.waitForAvailableCapital();
+        break;
+      case ManagerState.UPGRADING:
+        this.upgradeNetwork();
+        break;
+      default:
+        return false;
+    }
+    return true;
   }
 
   private selectComponentToBuy(): void {
@@ -58,7 +57,18 @@ export class Manager {
     // todo: implement
     log().debug(`Waiting for available capital to buy ${this.#componentToBuy.type}...`);
     log().debug(`Available capital: 1000000`);
+
+    const savingDuration = this.getSavingDuration(); // todo: scaffold to be removed
+    if (savingDuration > this.MAX_SAVING_DURATION) {
+      this.switchToState(ManagerState.STOP);
+      return;
+    }
+
     this.switchToState(ManagerState.UPGRADING);
+  }
+
+  private getSavingDuration(): number {
+    return this.hacknetAdapter.getProduction(); // todo: scaffold to be removed
   }
 
   private upgradeNetwork(): void {
@@ -72,5 +82,10 @@ export class Manager {
   private switchToState(state: ManagerState): void {
     this.#state = state;
     log().debug(`Transitioning to state ${this.#state}`);
+  }
+
+  // For testing purposes only
+  get state(): ManagerState {
+    return this.#state;
   }
 }
