@@ -8,37 +8,42 @@ export enum LogMode {
 export class Log {
   constructor(private readonly logMode: LogMode = LogMode.INFO) {}
 
-  error(message: string): void {
-    if (
-      this.logMode === LogMode.ERROR ||
-      this.logMode === LogMode.WARNING ||
-      this.logMode === LogMode.INFO ||
-      this.logMode === LogMode.DEBUG
-    ) {
-      console.error(`ERR - ${message}`);
-    }
+  // eslint-disable-next-line class-methods-use-this
+  error(message: string): string {
+    const logMessage = `ERROR - ${message}`;
+    console.error(logMessage);
+    return logMessage;
   }
 
-  warning(message: string): void {
+  warning(message: string): string {
     if (
       this.logMode === LogMode.WARNING ||
       this.logMode === LogMode.INFO ||
       this.logMode === LogMode.DEBUG
     ) {
-      console.warn(`WARNING - ${message}`);
+      const logMessage = `WARNING - ${message}`;
+      console.warn(logMessage);
+      return logMessage;
     }
+    return '';
   }
 
-  info(message: string): void {
+  info(message: string): string {
     if (this.logMode === LogMode.INFO || this.logMode === LogMode.DEBUG) {
-      console.info(`INFO - ${message}`);
+      const logMessage = `INFO - ${message}`;
+      console.info(logMessage);
+      return logMessage;
     }
+    return '';
   }
 
-  debug(message: string): void {
+  debug(message: string): string {
     if (this.logMode === LogMode.DEBUG) {
-      console.debug(`DEBUG - ${message}`);
+      const logMessage = `DEBUG - ${message}`;
+      console.debug(logMessage);
+      return logMessage;
     }
+    return '';
   }
 }
 
