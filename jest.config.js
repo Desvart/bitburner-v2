@@ -25,13 +25,16 @@ const config = {
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns: [
     '<rootDir>/node_module/',
-    '<rootDir>/.*/interface(s?)/',
+    '<rootDir>/.*/I[a-zA-Z]+.ts', // ignore interface
+    '<rootDir>/.*/([a-zA-Z]|\\d)+-logger.ts', // ignore logger helper
     '<rootDir>/.*/port(s?)/',
     '<rootDir>/.*/*.-port.ts',
     '<rootDir>/.*/.*-default.ts',
     '<rootDir>/.*/utils/rm-home.ts',
     '<rootDir>/.*/utils/log-decorator.ts',
     '<rootDir>/.*/index.ts',
+    '<rootDir>/.*/hacknet/',
+    '<rootDir>/.*/daemon.ts', // ignore app entry point
   ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -184,16 +187,10 @@ const config = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    '**/test/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[tj]s?(x)',
-    '**/*.steps.ts',
-  ],
+  testMatch: ['**/test/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)', '**/*.steps.ts'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
-  // testPathIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
+  testPathIgnorePatterns: ['<rootDir>/.*/hacknet/'],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
   // testRegex: [],
