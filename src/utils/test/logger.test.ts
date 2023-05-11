@@ -6,6 +6,7 @@ describe('logger', () => {
     [LogMode.WARNING, true],
     [LogMode.INFO, true],
     [LogMode.DEBUG, true],
+    [LogMode.UNDEFINED, false],
   ])('Check if error logs are logged', (input, expected) => {
     const log = new Log(input);
     expect(log.error('test') !== '').toBe(expected);
@@ -16,6 +17,7 @@ describe('logger', () => {
     [LogMode.WARNING, true],
     [LogMode.INFO, true],
     [LogMode.DEBUG, true],
+    [LogMode.UNDEFINED, false],
   ])('Check if error logs are logged', (input, expected) => {
     const log = new Log(input);
     expect(log.warning('test') !== '').toBe(expected);
@@ -26,6 +28,7 @@ describe('logger', () => {
     [LogMode.WARNING, false],
     [LogMode.INFO, true],
     [LogMode.DEBUG, true],
+    [LogMode.UNDEFINED, false],
   ])('Check if error logs are logged', (input, expected) => {
     const log = new Log(input);
     expect(log.info('test') !== '').toBe(expected);
@@ -36,6 +39,7 @@ describe('logger', () => {
     [LogMode.WARNING, false],
     [LogMode.INFO, false],
     [LogMode.DEBUG, true],
+    [LogMode.UNDEFINED, false],
   ])('Check if error logs are logged', (input, expected) => {
     const log = new Log(input);
     expect(log.debug('test') !== '').toBe(expected);
