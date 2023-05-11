@@ -130,7 +130,7 @@ const config = {
     [
       'jest-slow-test-reporter',
       {
-        numTests: 8,
+        numTests: 3,
         warnOnSlowerThan: 300,
         color: true,
       },
