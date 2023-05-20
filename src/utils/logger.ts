@@ -22,7 +22,6 @@ export class Log {
       this.logMode === LogMode.INFO ||
       this.logMode === LogMode.DEBUG
     ) {
-
       this.#lastMessage = `${this.logContext}ERROR - ${message}`;
       console.error(this.#lastMessage);
       return this.#lastMessage;
