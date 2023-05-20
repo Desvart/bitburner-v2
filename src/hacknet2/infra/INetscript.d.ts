@@ -1,8 +1,5 @@
 // From: 'https://raw.githubusercontent.com/danielyxie/bitburner/be42689697164bf99071c0bcf34baeef3d9b3ee8/src/ScriptEditor/NetscriptDefinitions.d.ts'
 
-/* TODO: remove ns1-specific documentation for all functions, and just create a basic doc somewhere that says how to
- *       convert examples for use in .script files (e.g. no async/await, var instead of let/const, etc). */
-
 /** @public */
 interface HP {
   current: number;
@@ -20,7 +17,6 @@ interface Skills {
   intelligence: number;
 }
 
-// TODO: provide same treatment to CodingContractData as for SleeveTask (actual types)
 /**
  * Coding contract data will differ depending on coding contract.
  * @public

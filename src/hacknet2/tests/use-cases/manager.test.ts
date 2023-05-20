@@ -42,7 +42,7 @@ describe('Test manager object', () => {
 
   function setTheSavingDurationTo(savingDuration: number): HacknetAdapter {
     const mockedHacknetAdapter: HacknetAdapter = mock<HacknetAdapter>();
-    when(mockedHacknetAdapter.getProduction()).thenReturn(savingDuration);
+    when(mockedHacknetAdapter.getTotalProduction()).thenReturn(savingDuration);
     return instance(mockedHacknetAdapter);
   }
 

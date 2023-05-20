@@ -10,6 +10,9 @@ enum ManagerState {
   STOP = 'STOP',
 }
 
+// fixme: refactor state by using state pattern (split state Vs operations => operation branch to next step)
+
+
 export class Manager {
   #state: ManagerState = ManagerState.SELECTING;
   #componentToBuy: Component;
@@ -68,7 +71,7 @@ export class Manager {
   }
 
   private getSavingDuration(): number {
-    return this.hacknetAdapter.getProduction(); // todo: scaffold to be removed
+    return this.hacknetAdapter.getTotalProduction(); // todo: scaffold to be removed
   }
 
   private upgradeNetwork(): void {
