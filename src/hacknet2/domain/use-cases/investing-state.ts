@@ -1,18 +1,31 @@
 import { HacknetAdapter } from '/hacknet2/infra/hacknet-adapter';
-import { Manager2 } from '/hacknet2/domain/use-cases/manager2';
+import { Manager } from '/hacknet2/domain/use-cases/manager';
 import { IState } from '/hacknet2/domain/use-cases/IState';
 import { SelectingState } from '/hacknet2/domain/use-cases/selecting-state';
 import { SavingState } from '/hacknet2/domain/use-cases/saving-state';
+import { log } from '/hacknet2/infra/hacket-logger';
 
 export class InvestingState implements IState {
   #nextState: IState;
-  constructor(private manager: Manager2, private readonly hacknetAdapter: HacknetAdapter) {}
+  private log = log(this.constructor.name);
+  constructor(private manager: Manager, private readonly hacknetAdapter: HacknetAdapter) {}
 
   performStateOperations(): void {
+    this.log.debug(
+      `Upgrading node {node.id} network with component ${this.manager.componentToUpgrade.type}...`
+    );
+
     const purchaseStatus = this.upgradingComponent(); // todo: scaffold
+
     if (purchaseStatus) {
+      this.log.debug(
+        `Upgrade node {upgradedNode.id} with component ${this.manager.componentToUpgrade.type}`
+      );
       return this.gotoNextState();
     }
+    this.log.warning(
+      `Upgrade node {upgradedNode.id} with component ${this.manager.componentToUpgrade.type} couldn't be done.`
+    );
     return this.gotoSavingState();
   }
 

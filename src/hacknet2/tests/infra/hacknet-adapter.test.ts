@@ -1,5 +1,4 @@
-import { instance, mock, when } from 'ts-mockito';
-import { Manager2 } from '../../domain/use-cases/manager2';
+import { instance, mock } from 'ts-mockito';
 import { HacknetAdapter } from '../../infra/hacknet-adapter';
 import { NS } from '../../infra/INetscript';
 

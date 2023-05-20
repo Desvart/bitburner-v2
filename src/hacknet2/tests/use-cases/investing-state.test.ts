@@ -1,16 +1,18 @@
 import { instance, mock, when } from 'ts-mockito';
-import { Manager2 } from '../../domain/use-cases/manager2';
+import { Manager } from '../../domain/use-cases/manager';
 import { HacknetAdapter } from '../../infra/hacknet-adapter';
 import { SavingState } from '../../domain/use-cases/saving-state';
 import { InvestingState } from '../../domain/use-cases/investing-state';
 import { SelectingState } from '../../domain/use-cases/selecting-state';
+import { ComponentType } from '../../domain/entities/component';
 
 describe('Test investing state object', () => {
-  let manager: Manager2;
+  let manager: Manager;
   let hacknetAdapter: HacknetAdapter;
   beforeEach(() => {
-    hacknetAdapter = instance(mock(HacknetAdapter));
-    manager = new Manager2(hacknetAdapter);
+    const mockManager: Manager = mock(Manager);
+    when(mockManager.componentToUpgrade).thenReturn({ type: ComponentType.NODE });
+    manager = instance(mockManager);
   });
 
   test('Next step is SavingState if upgrading has failed', () => {
