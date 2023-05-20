@@ -20,5 +20,9 @@
   },
   "coverageAnalysis": "perTest",
   "mutate": ["src/**/*.ts","!src/**/*.spec.ts","!src/**/*.test.ts"],
-  "disableTypeChecks": "{test,src,lib}/**/*.{js,ts,jsx,tsx,html,vue}"
+  "disableTypeChecks": "{test,src,lib}/**/*.{js,ts,jsx,tsx,html,vue}",
+  "ignoreStatic": true,
+  "mutator": {
+    "excludedMutations": ["StringLiteral"]
+  }
 }

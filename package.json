@@ -31,6 +31,7 @@
     "cucumber_old": "SET NODE_OPTIONS=--loader ts-node/esm --no-warnings --experimental-specifier-resolution=node --enable-source-maps && cucumber-js --config=\"./config/cucumber.json\"",
     "cucumber": "node --loader ts-paths-esm-loader --no-warnings --experimental-specifier-resolution=node --enable-source-maps node_modules/@cucumber/cucumber/bin/cucumber.js",
     "test": "npm run unit && npm run cucumber",
+    "test:mutation": "stryker run",
     "posttest": "",
     "precompile": "npm run test",
     "clean": "mkdir dist && rmdir /s /q dist && mkdir dist",
