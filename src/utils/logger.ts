@@ -7,7 +7,13 @@ export enum LogMode {
 }
 
 export class Log {
-  constructor(private readonly logMode: LogMode = LogMode.INFO, private readonly logContext = '') {}
+  #lastMessage = '';
+  private logContext = '';
+  constructor(private readonly logMode: LogMode = LogMode.INFO, logContext = '') {
+    if (logContext !== '') {
+      this.logContext = `${logContext} - `;
+    }
+  }
 
   error(message: string): string {
     if (
@@ -16,11 +22,12 @@ export class Log {
       this.logMode === LogMode.INFO ||
       this.logMode === LogMode.DEBUG
     ) {
-      const logMessage = `${this.logContext} - ERROR - ${message}`;
-      console.error(logMessage);
-      return logMessage;
+
+      this.#lastMessage = `${this.logContext}ERROR - ${message}`;
+      console.error(this.#lastMessage);
+      return this.#lastMessage;
     }
-    return '';
+    return 'skip';
   }
 
   warning(message: string): string {
@@ -29,29 +36,34 @@ export class Log {
       this.logMode === LogMode.INFO ||
       this.logMode === LogMode.DEBUG
     ) {
-      const logMessage = `${this.logContext} - WARNING - ${message}`;
-      console.warn(logMessage);
-      return logMessage;
+      this.#lastMessage = `${this.logContext}WARNING - ${message}`;
+      console.warn(this.#lastMessage);
+      return this.#lastMessage;
     }
-    return '';
+    return 'skip';
   }
 
   info(message: string): string {
     if (this.logMode === LogMode.INFO || this.logMode === LogMode.DEBUG) {
-      const logMessage = `${this.logContext} - INFO - ${message}`;
-      console.info(logMessage);
-      return logMessage;
+      this.#lastMessage = `${this.logContext}INFO - ${message}`;
+      console.info(this.#lastMessage);
+      return this.#lastMessage;
     }
-    return '';
+    return 'skip';
   }
 
   debug(message: string): string {
     if (this.logMode === LogMode.DEBUG) {
-      const logMessage = `${this.logContext} - DEBUG - ${message}`;
-      console.debug(logMessage);
-      return logMessage;
+      this.#lastMessage = `${this.logContext}DEBUG - ${message}`;
+      console.debug(this.#lastMessage);
+      return this.#lastMessage;
     }
-    return '';
+    return 'skip';
+  }
+
+  // For testing purposes
+  get lastMessage(): string {
+    return this.#lastMessage;
   }
 }
 
