@@ -9,3 +9,4 @@
 /doc/coverage/
 /doc/jest-report/
 /doc/mutations/
+/src/index.ts
