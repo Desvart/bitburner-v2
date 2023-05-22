@@ -8,7 +8,7 @@ describe('Test manager object', () => {
     const hacknetAdapter: HacknetAdapter = instance(mock(HacknetAdapter));
     const manager = new Manager(hacknetAdapter);
 
-    expect(manager.nextState instanceof SelectingState).toBe(true);
+    expect(manager.state instanceof SelectingState).toBe(true);
   });
 
   test('Manager starts with stopLoop = false', () => {
