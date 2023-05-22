@@ -24,4 +24,10 @@ export class HacknetAdapter {
     // TODO: implement (with eslint-disable)
     return true;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  checkFormulasAvailability(): boolean {
+    // TODO: implement (with eslint-disable)
+    return false;
+  }
 }
